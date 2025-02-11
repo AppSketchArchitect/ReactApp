@@ -1,0 +1,44 @@
+form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button:hover {
+    background: #666666;
+}
+
+h1{
+    display: flex;
+    margin: 10px;
+}
+
+h2{
+    display: flex;
+    margin: 10px;
+}
+
+p{
+    display: flex;
+    margin: 10px;
+}
