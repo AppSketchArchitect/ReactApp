@@ -6,13 +6,13 @@ import useUserContext from "../context/UserContext";
 
 export default function Dashboard(){
     const userContext = useUserContext();
-    const [data, setData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const token = localStorage.getItem("token");
+    const [data, setData] = useState(null); /* Ligne affichée pour les donnée ou un message d'erreur */
+    const [isLoading, setIsLoading] = useState(true); /* Permet d'activer et de désactiver le spinner (Activé au départ) */
+    const token = localStorage.getItem("token"); /* Charge le token */
 
     if(userContext.user.isAuthentified){
         setTimeout(async () => { //Simule un délai de la réponse de 3s
-            fetch("http://localhost:3000/dashboard", {
+            fetch("http://localhost:3000/dashboard", { /* Envoie une requête à l'api pour récupérer les données par rapport au token */
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -20,16 +20,16 @@ export default function Dashboard(){
             })
             .then(async res => {
                 if(res.status == 200){
-                    const json = await res.json();
+                    const json = await res.json(); //Récupération des données
                     setData(json);
                 }else{
                     setData({error: "Erreur d'autorisation."});
                 }
             })
             .catch((e) => {
-                console.log(e);
+                console.log(e); //Si erreur l'afficher dans la console
             });
-            setIsLoading(false);
+            setIsLoading(false); //Désactivation du spinner à la fin
         }, 3000);
     }
     

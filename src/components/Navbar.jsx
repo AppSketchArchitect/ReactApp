@@ -6,6 +6,8 @@ export default function Navbar() {
     const userContext = useUserContext();
     const navigate = useNavigate();
 
+    //Si le bouton déconnexion est cliqué, alors on reset le contexte, on supprime le token enregistré
+    //et on renvoie l'utilisateur à la page login
     const onDisconnect = (e) => {
       e.preventDefault();
       userContext.setUser({ email: '', isAuthentified: false });
@@ -13,6 +15,7 @@ export default function Navbar() {
       navigate("/Login");
     }
 
+    //Si les boutons de pages (ex: Register) est cliqué on envoie l'utilisateur à la page correspondante
     return (
       <div>
         <nav>

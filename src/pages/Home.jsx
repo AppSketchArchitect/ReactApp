@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import './page.css';
 
-export default function Home(){
+export default function Home(){ //Page d'accueil
     return (
         <>
             <Navbar/>

@@ -10,7 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx"
 export default function App() {
   return (
     <>
-      <UserProvider>
+      <UserProvider> {/* L'UserProvider permet de fournir le même contexte aux enfants (Variables globales) */}
         <BrowserRouter>
           <Routes>
             <Route index path="/" element={<Home/>}/>
@@ -18,7 +18,9 @@ export default function App() {
             <Route path="/Login" element={<Login/>}/>
             <Route path="/Dashboard" element={
               <>
+                {/* Si l'utilisateur n'est pas connecté alors ProtectedRoute le renverra à la page /Login */}
                 <ProtectedRoute/>
+                {/* Sinon le tableau de bord s'affichera */}
                 <Dashboard/>
               </>
             }/>

@@ -7,7 +7,7 @@ export default function Returnbar() {
   return (
     <div>
       <nav>
-          <button onClick={(e) => {
+          <button onClick={(e) => { //Renvoie à la page de base (Index) soit /Home
             e.preventDefault();
             navigate("/");
           }}>{"← Revenir"}</button>
