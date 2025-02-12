@@ -1,8 +1,37 @@
-# React + Vite
+# 🚀 Projet React avec API - Dashboard & Authentification
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Informations
 
-Currently, two official plugins are available:
+Ce projet répond (quasi) intégralement aux exigences du TP disponible sur Notion :  
+🔗 [TP - Création d'une application React](https://sysentive.notion.site/TP-cr-ation-d-une-application-React-avec-authentification-et-tableau-de-bord-18ca84550c768022a92cc776f7b52b64)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+⚠️ **Limitation :**  
+L'implémentation de la fonctionnalité **"Modification des informations utilisateur"** n'est pas possible en raison des restrictions de l'API fournie. Impossible de faire des **updates** ou **deletes**, ni d'ajouter un pseudo modifiable.  
+🔗 [API GitHub](https://github.com/hellodamien/dashboard-api)
+
+---
+
+## 📂 Organisation du projet
+
+L'application est composée de **4 pages principales** :
+
+| 📍 Page       | 🏷️ Route          | 🔹 Fonctionnalité |
+|--------------|------------------|-------------------|
+| 🏠 **Home**  | `/`              | Accueil du site |
+| ✍️ **Register**  | `/Register`     | Inscription utilisateur |
+| 🔐 **Login** | `/Login`         | Connexion utilisateur |
+| 📊 **Dashboard** | `/Dashboard`   | Interface principale après connexion |
+
+---
+
+## 📦 Installation & Exécution
+
+### 🛠️ Prérequis
+- **Node.js**
+- **npm** ou **yarn**
+
+### ⚙️ Installation des dépendances
+```sh
+npm install
+# ou
+yarn install
