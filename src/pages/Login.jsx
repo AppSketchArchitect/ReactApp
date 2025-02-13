@@ -5,15 +5,21 @@ import { useUserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import './page.css';
 
-export default function Login(){
+export default function Login() {
     const userContext = useUserContext();
     const navigate = useNavigate();
 
-    if(userContext.user.isAuthentified){ //Si l'utilisateur est déja connecté le renvoyer à Dashboard
-        useEffect(()=> {
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        if (userContext.user.isAuthentified || (token != null && token != "")) { //Si l'utilisateur est déja connecté le renvoyer à Dashboard
+            userContext.setUser({
+                email: userContext.user.email,
+                isAuthentified: true
+            })
             navigate("/Dashboard");
-        }, []);
-    }
+        }
+    }, []);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,13 +32,13 @@ export default function Login(){
 
         setIsLoading(true); //Active le spinner
         setErrorMessage(""); //Message vide au départ
-        
+
         const data = {
             email: email,
             password: password
         }
 
-        fetch("http://localhost:3000/login",{ //Envoie une requête à l'api pour essayer de se connecter
+        fetch("http://localhost:3000/login", { //Envoie une requête à l'api pour essayer de se connecter
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -41,7 +47,7 @@ export default function Login(){
         })
         .then(async res => {
             setTimeout(async () => { //Simule un délai de la réponse de 3s
-                switch(res.status){
+                switch (res.status) {
                     case 200:
                         const json = await res.json(); //Récupération des données
                         localStorage.setItem("token", json.token); //Enregistrement du token
@@ -74,19 +80,19 @@ export default function Login(){
 
     return (
         <>
-            <Returnbar/>
+            <Returnbar />
             <h1>Connexion</h1>
             <form onSubmit={onLogin}>
-                <div/>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
-                <div/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe"/>
-                <div/>
+                <div />
+                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+                <div />
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe" />
+                <div />
                 <button type="submit">Se connecter</button>
-                <div/>
-                {errorMessage != "" && <p style={{ color: "red", marginTop: "10px"}}>{errorMessage}</p>}
+                <div />
+                {errorMessage != "" && <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>}
             </form>
-            {isLoading && <Spinner/>}
+            {isLoading && <Spinner />}
         </>
     );
 };

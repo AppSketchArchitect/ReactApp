@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import "./App.css";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
+import UpdatePasswordPage from "./pages/UpdatePassword.jsx";
 
 export default function App() {
   return (
@@ -22,6 +23,12 @@ export default function App() {
                 <ProtectedRoute/>
                 {/* Sinon le tableau de bord s'affichera */}
                 <Dashboard/>
+              </>
+            }/>
+            <Route path="/UpdatePassword" element={
+              <>
+                <ProtectedRoute/>
+                <UpdatePasswordPage/>
               </>
             }/>
           </Routes>

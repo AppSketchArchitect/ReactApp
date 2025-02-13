@@ -1,66 +1,61 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Returnbar from "../components/Returnbar";
 import Spinner from "../components/Spinner";
 import './page.css';
 
 import z from "zod";
-import useUserContext from "../context/UserContext";
-import { useNavigate } from "react-router";
 
-const registerSchema = z.object({ //Schéma d'enregistrement
-    email: z.string().email(),
-    password: z.string().min(3)
+const updateSchema = z.object({ //Schéma d'enregistrement
+    oldPassword: z.string(),
+    newPassword: z.string().min(3),
+    confirmedPassword: z.string()
 });
 
-export default function Register(){
-
-    const userContext = useUserContext();
-    const navigate = useNavigate();
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+export default function UpdatePasswordPage(){
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(""); //Permet d'afficher un message d'erreur
     const [successMessage, setSuccessMessage] = useState(""); //Permet d'afficher le message de succès
 
     const [isLoading, setIsLoading] = useState(false); //Permet d'afficher le spinner si besoin
 
-    useEffect(() => {
-        if(userContext.user.isAuthentified){
-            navigate("/Dashboard");
-        }
-    }, []);
-
-    const onRegister = (e) => {
+    const onChangePassword = (e) => {
         e.preventDefault();
-        
+
         setIsLoading(true); //Active le spinner
 
-        //Reset les messages
         setErrorMessage("");
         setSuccessMessage("");
 
-        //Vérifie que les mots de passe ne soit pas différents
-        if(password != confirmedPassword){
+        const token = localStorage.getItem("token");
+
+        const data = {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        }
+
+        if(newPassword != confirmedPassword){
             setErrorMessage("Les mots de passe doivent être identique");
             setIsLoading(false);
             return;
         }
-        
-        const data = {
-            email: email,
-            password: password
+
+        const toParseData = {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            confirmedPassword: confirmedPassword
         }
 
         //Vérifie si les données sont valide à l'enregistrement
-        const registerParsed = registerSchema.safeParse(data);
+        const updateParsed = updateSchema.safeParse(toParseData);
 
-        if(registerParsed.success == true){
-            
-            fetch("http://localhost:3000/register",{ //Requête à l'api avec les données
+        if(updateParsed.success == true){
+            fetch("http://localhost:3000/change-password",{ //Requête à l'api avec les données
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(data)
             })
@@ -68,20 +63,10 @@ export default function Register(){
                 setTimeout(async () => { //Simule un délai de la réponse de 3s
                     switch(res.status){ //Affichage d'un message en fonction de la réussite
                         case 200:
-                            const token = await res.json().token;
-                            await userContext.setUser({
-                                email: email,
-                                isAuthentified: true
-                            });
-                            localStorage.setItem("token", token);
-                            navigate("/Dashboard");
-                            setSuccessMessage("Inscription réussie !");
+                            setSuccessMessage("Changement du mot de passe réussi !");
                             break;
-                        case 401:
+                        case 401 || 400:
                             setErrorMessage("Les entrées sont incorrectes.");
-                            break;
-                        case 400:
-                            setErrorMessage("L'email est déja utilisé.");
                             break;
                         default:
                             console.log(res.status);
@@ -96,24 +81,24 @@ export default function Register(){
                 setIsLoading(false);
             });
         }else{
-            setErrorMessage("Entrée (email ou mot de passe) incorrect pour l'enregistrement.");
+            setErrorMessage("Les entrées sont incorrectes.");
             setIsLoading(false);
         }
     }
 
-    return (
+    return(
         <>
             <Returnbar/>
-            <h1>S'inscrire</h1>
-            <form onSubmit={onRegister}>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe"/>
+            <h1>Changer le mot de passe</h1>
+            <form onSubmit={onChangePassword}>
+                <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} placeholder="Ancien mot de passe"/>
+                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Nouveau mot de passe"/>
                 <input type="password" value={confirmedPassword} onChange={(e) => setConfirmedPassword(e.target.value)} placeholder="Confirmation du mot de passe"/>
-                <button type="submit">S'inscrire</button>
+                <button type="submit">Changer le mot de passe</button>
                 {errorMessage != "" && <p style={{ color: "red", marginTop: "10px"}}>{errorMessage}</p>}
                 {successMessage != "" && <p style={{ color: "green", marginTop: "10px"}}>{successMessage}</p>}
             </form>
             {isLoading && <Spinner/>}
         </>
     );
-};
+}

@@ -19,19 +19,31 @@ export default function Navbar() {
     return (
       <div>
         <nav>
-          <button onClick={(e) => {
+          {!userContext.user.isAuthentified && <button onClick={(e) => {
             e.preventDefault();
             navigate("/Register");
-          }}>{"S'inscrire"}</button>
-          <button onClick={(e) => {
+          }}>{"S'inscrire"}</button>}
+
+          {!userContext.user.isAuthentified && <button onClick={(e) => {
             e.preventDefault();
             navigate("/Login");
-          }}>{"Connexion"}</button>
-          <button onClick={(e) => {
+          }}>{"Connexion"}</button>}
+          
+          {userContext.user.isAuthentified && <button onClick={(e) => {
             e.preventDefault();
             navigate("/Dashboard");
-          }}>{"Tableau de bord"}</button>
-          <button onClick={onDisconnect}>Se déconnecter</button>
+          }}>{"Tableau de bord"}</button>}
+
+          {userContext.user.isAuthentified && <button onClick={ (e) => {
+            e.preventDefault();
+            navigate("/UpdatePassword");
+          }}>{"Changer de mot de passe"}</button>}
+          
+          {userContext.user.isAuthentified && 
+            <button onClick={onDisconnect}>
+              Se déconnecter
+            </button>
+          }
         </nav>
       </div>
     );
